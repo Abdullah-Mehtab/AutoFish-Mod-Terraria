@@ -1,0 +1,27 @@
+{
+  "id": "autofisher",
+  "name": "AutoFisher",
+  "version": "1.0.0",
+  "author": "Rostezkiy",
+  "description": "A comprehensive fishing automation tool. Features automated casting and precision reeling for an effortless fishing experience.",
+  "entry_dll": "AutoFisher.dll",
+  "icon": "icon.png",
+
+  "config_schema": {
+    "enabled": {
+      "type": "bool",
+      "default": true,
+      "label": "Master Switch",
+      "description": "Enables or disables all automated fishing logic globally."
+    }
+  },
+
+  "keybinds": [
+    {
+      "id": "toggle",
+      "label": "Toggle Automation",
+      "description": "Hotkey to quickly enable or disable the AutoFisher features during gameplay.",
+      "default": "F5"
+    }
+  ]
+}
