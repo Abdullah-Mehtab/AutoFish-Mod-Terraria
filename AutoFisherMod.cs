@@ -1,31 +1,34 @@
 using TerrariaModder.Core;
+using TerrariaModder.Core.Config;
 using TerrariaModder.Core.Logging;
 using HarmonyLib;
 
 namespace AutoFisher
 {
-    // Главный класс мода
-    public class AutoFisherMod : IMod
+    public class AutoFisherConfig : ModConfig
     {
-        public void OnWorldLoad()
-        {
-        }
+        public override int Version => 1;
 
-        public void OnWorldUnload()
-        {
-        }
+        [Label("Master Switch")]
+        [Description("Enables or disables all automated fishing logic globally.")]
+        public bool Enabled { get; set; } = true;
+    }
+
+    public class AutoFisherMod : IMod, IModLifecycle
+    {
         public string Id => "autofisher";
         public string Name => "Auto Fisher";
-        public string Version => "1.0.0";
+        public string Version => "1.1.0";
 
         private ILogger _log;
-        private ModContext _context;
+        private AutoFisherConfig _config;
 
         public void Initialize(ModContext context)
         {
             _log = context.Logger;
-            _context = context;
-            LoadConfigValues();
+            _config = context.GetConfig<AutoFisherConfig>();
+
+            ModState.IsEnabled = _config.Enabled;
 
             context.RegisterKeybind("toggle", "Toggle Auto Fisher", "Enable/Disable autofisher", "F5", OnTogglePressed);
 
@@ -37,24 +40,22 @@ namespace AutoFisher
         private void OnTogglePressed()
         {
             ModState.IsEnabled = !ModState.IsEnabled;
+            _config.Enabled = ModState.IsEnabled;
+            _config.Save();
             _log.Info($"Auto Fisher is now: {(ModState.IsEnabled ? "ENABLED" : "DISABLED")}");
-
-            _context.Config.Set("enabled", ModState.IsEnabled);
-            _context.Config.Save();
         }
 
         public void OnConfigChanged()
         {
             _log.Info("Config changed, reloading values...");
-            LoadConfigValues();
+            if (_config != null)
+                ModState.IsEnabled = _config.Enabled;
         }
 
-        private void LoadConfigValues()
-        {
-            if (_context?.Config == null) return;
-            ModState.IsEnabled = _context.Config.Get("enabled", true);
-            _log.Debug($"Config loaded: enabled={ModState.IsEnabled}");
-        }
+        public void OnContentReady(ModContext context) { }
+        public void OnWorldLoad() { }
+        public void OnWorldUnload() { }
+
         public void Unload()
         {
             _log.Info($"{Name} unloaded!");

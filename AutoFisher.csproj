@@ -5,24 +5,24 @@
     <RootNamespace>AutoFisher</RootNamespace>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
-    <OutputPath>..\..\build\plugins\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <!-- Set this to your Terraria install folder before building -->
+    <TerrariaPath>C:\Program Files (x86)\Steam\steamapps\common\Terraria</TerrariaPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\TerrariaModder.Core.csproj">
+    <Reference Include="TerrariaModder.Core">
+      <HintPath>$(TerrariaPath)\TerrariaModder\core\TerrariaModder.Core.dll</HintPath>
       <Private>false</Private>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
+    </Reference>
     <Reference Include="0Harmony">
-      <HintPath>..\..\Terraria\Mods\Libs\0Harmony.dll</HintPath>
+      <HintPath>$(TerrariaPath)\TerrariaModder\core\deps\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Terraria">
-      <HintPath>..\..\Terraria\Terraria.exe</HintPath>
+      <HintPath>$(TerrariaPath)\Terraria.exe</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
